@@ -1,0 +1,11 @@
+{
+  "name": "infostyle",
+  "description": "Информационный стиль по книге «Пиши, сокращай»: писать и редактировать тексты кратко, ясно и честно — стоп-слова, синтаксис, структура, заголовки, реклама, тексты о себе, отклики на вакансии",
+  "version": "1.0.0",
+  "author": {
+    "name": "George Kiknadze"
+  },
+  "repository": "https://github.com/GAKiknadze/sokrat",
+  "license": "BSD-3-Clause",
+  "keywords": ["writing", "editing", "russian", "infostyle", "copywriting", "plain-language"]
+}
