@@ -135,15 +135,21 @@ codex plugin marketplace upgrade sokrat
 
 ## Выпуск новой версии
 
-Агенты замечают обновление плагина по номеру версии. После правок в `skills/` поднимите версию во всех манифестах одной командой и закоммитьте изменения:
+Claude Code решает, есть ли обновление, по полю `version` в манифесте плагина. Пока номер не изменился, пользователи остаются на старой копии, сколько бы коммитов ни попало в репозиторий.
 
-```bash
-bash bump-version.sh patch   # правки текста скилов: 1.0.0 → 1.0.1
-bash bump-version.sh minor   # новый скил или справочник: 1.0.0 → 1.1.0
-bash bump-version.sh major   # переименование или удаление скилов: 1.0.0 → 2.0.0
-```
+После правок в `skills/` или `portable/`:
 
-Скрипт меняет версию в `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` и `gemini-extension.json` и останавливается, если версии в них уже расходятся.
+1. Поднимите версию во всех манифестах:
+
+   ```bash
+   bash bump-version.sh patch   # правки текста: 1.0.0 → 1.0.1
+   bash bump-version.sh minor   # новый скил или справочник: 1.0.0 → 1.1.0
+   bash bump-version.sh major   # переименование или удаление скилов: 1.0.0 → 2.0.0
+   ```
+
+2. Закоммитьте правки вместе с новой версией и отправьте на GitHub.
+
+Скрипт меняет версию в `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.codex-plugin/plugin.json` и `gemini-extension.json`. Если версии в них расходятся, скрипт ничего не меняет и называет файл с другой версией.
 
 ## Лицензия
 
