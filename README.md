@@ -43,7 +43,7 @@
 codex plugin marketplace add GAKiknadze/sokrat
 ```
 
-Затем в Codex откройте `/plugins` и установите `infostyle` из маркетплейса `sokrat`. Обновить: `codex plugin marketplace upgrade sokrat`.
+Затем в Codex откройте `/plugins` и установите `infostyle` из маркетплейса `sokrat`.
 
 Скилы срабатывают сами по описанию задачи. Вызвать вручную: `$infostyle`, `$infostyle-review`, `$infostyle-selling`, `$infostyle-cover-letter` или выбрать в `/skills`.
 
@@ -61,7 +61,6 @@ bash install.sh
 
 - перезапустите агента, чтобы он увидел скилы;
 - вызывайте их без префикса: `/infostyle` в Claude Code, `$infostyle` в Codex;
-- обновляйте командой `git pull` в папке репозитория — симлинки подхватят изменения;
 - удаляйте командой `bash install.sh --uninstall`.
 
 Чтобы подключить скилы только к одному проекту в Codex, скопируйте папки из `skills/` в `.agents/skills/` этого проекта.
@@ -69,10 +68,10 @@ bash install.sh
 ### Gemini CLI: как расширение
 
 ```bash
-gemini extensions install https://github.com/GAKiknadze/sokrat
+gemini extensions install https://github.com/GAKiknadze/sokrat --auto-update
 ```
 
-Расширение добавляет `portable/SYSTEM_PROMPT.md` в контекст каждого разговора. Личные скилы загружаются только под задачу с текстом и тратят меньше контекста.
+Флаг `--auto-update` включает автообновление. Расширение добавляет `portable/SYSTEM_PROMPT.md` в контекст каждого разговора. Личные скилы загружаются только под задачу с текстом и тратят меньше контекста.
 
 ### Другие нейросети
 
@@ -84,6 +83,46 @@ gemini extensions install https://github.com/GAKiknadze/sokrat
 | ChatGPT | «Настройки → Персонализация → Пользовательские инструкции»: вставить `portable/SHORT_PROMPT.md`. В GPTs и Projects — `portable/SYSTEM_PROMPT.md` |
 | Claude.ai Projects | Вставить `portable/SYSTEM_PROMPT.md` в инструкции проекта |
 | API любой модели | Передать `portable/SYSTEM_PROMPT.md` как системный промпт |
+
+## Обновления
+
+### Claude Code
+
+Claude Code сам обновляет плагины из маркетплейса, если для него включено автообновление. Для `sokrat` оно по умолчанию выключено: так Claude Code поступает со всеми маркетплейсами, кроме официальных. Включить:
+
+1. Запустите `/plugin` и перейдите на вкладку **Marketplaces**.
+2. Выберите `sokrat`.
+3. Выберите **Enable auto-update**.
+
+Claude Code скачает новую версию после старта сессии, а загрузит её после `/reload-plugins` или в следующей сессии. Обновить сразу: `claude plugin update infostyle@sokrat`.
+
+### Gemini CLI
+
+Расширение обновляется само, если его поставили с флагом `--auto-update`:
+
+```bash
+gemini extensions install https://github.com/GAKiknadze/sokrat --auto-update
+```
+
+Если расширение уже стоит без флага, удалите его командой `gemini extensions uninstall infostyle` и поставьте заново.
+
+### Codex
+
+Обновите маркетплейс командой:
+
+```bash
+codex plugin marketplace upgrade sokrat
+```
+
+### Личные скилы
+
+Скрипт `install.sh` ставит симлинки на папку репозитория, поэтому скилы обновляет `git pull` в этой папке. Чтобы обновлять их каждый день в 10:00, добавьте строку в `crontab -e`:
+
+```
+0 10 * * * git -C /путь/к/sokrat pull --ff-only --quiet
+```
+
+Замените `/путь/к/sokrat` на свою папку. Если компьютер в это время выключен, cron пропустит обновление до следующего дня.
 
 ## Как пользоваться
 
