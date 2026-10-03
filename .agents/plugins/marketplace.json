@@ -1,0 +1,20 @@
+{
+  "name": "sokrat",
+  "interface": {
+    "displayName": "sokrat: информационный стиль"
+  },
+  "plugins": [
+    {
+      "name": "infostyle",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

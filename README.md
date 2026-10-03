@@ -23,7 +23,7 @@
 
 Для нейросетей без поддержки скилов:
 
-- `portable/SYSTEM_PROMPT.md` — вся методика одной инструкцией (около 2 тысяч слов);
+- `portable/SYSTEM_PROMPT.md` — вся методика одной инструкцией (около 1500 слов);
 - `portable/SHORT_PROMPT.md` — короткая версия до 1000 знаков для полей с ограничением длины.
 
 ## Установка
@@ -35,9 +35,21 @@
 /plugin install infostyle@sokrat
 ```
 
-Скилы срабатывают сами, когда вы просите написать или поправить текст. Вызвать вручную: `/infostyle`, `/infostyle-review`, `/infostyle-selling`, `/infostyle-cover-letter` (в плагине — с префиксом `infostyle:`).
+Скилы срабатывают сами, когда вы просите написать или поправить текст. Вызвать вручную: `/infostyle:infostyle`, `/infostyle:infostyle-review`, `/infostyle:infostyle-selling`, `/infostyle:infostyle-cover-letter`.
+
+### Codex: как плагин
+
+```bash
+codex plugin marketplace add GAKiknadze/sokrat
+```
+
+Затем в Codex откройте `/plugins` и установите `infostyle` из маркетплейса `sokrat`. Обновить: `codex plugin marketplace upgrade sokrat`.
+
+Скилы срабатывают сами по описанию задачи. Вызвать вручную: `$infostyle`, `$infostyle-review`, `$infostyle-selling`, `$infostyle-cover-letter` или выбрать в `/skills`.
 
 ### Claude Code, Codex, Gemini CLI, Copilot CLI: как личные скилы
+
+Выберите один способ: плагин или личные скилы. Если поставить оба, агент увидит каждый скил дважды.
 
 ```bash
 git clone https://github.com/GAKiknadze/sokrat.git
@@ -45,7 +57,14 @@ cd sokrat
 bash install.sh
 ```
 
-Скрипт создаёт симлинки в `~/.claude/skills/` (Claude Code) и `~/.agents/skills/` (общий каталог, который читают Codex, Gemini CLI и Copilot CLI). Удалить: `bash install.sh --uninstall`.
+Скрипт создаёт симлинки в `~/.claude/skills/` (Claude Code) и `~/.agents/skills/` (общую папку, которую читают Codex, Gemini CLI и Copilot CLI). Дальше:
+
+- перезапустите агента, чтобы он увидел скилы;
+- вызывайте их без префикса: `/infostyle` в Claude Code, `$infostyle` в Codex;
+- обновляйте командой `git pull` в папке репозитория — симлинки подхватят изменения;
+- удаляйте командой `bash install.sh --uninstall`.
+
+Чтобы подключить скилы только к одному проекту в Codex, скопируйте папки из `skills/` в `.agents/skills/` этого проекта.
 
 ### Gemini CLI: как расширение
 
@@ -53,15 +72,15 @@ bash install.sh
 gemini extensions install https://github.com/GAKiknadze/sokrat
 ```
 
-Расширение подключает `portable/SYSTEM_PROMPT.md` как контекст через `GEMINI.md`.
+Расширение добавляет `portable/SYSTEM_PROMPT.md` в контекст каждого разговора. Личные скилы загружаются только под задачу с текстом и тратят меньше контекста.
 
 ### Другие нейросети
 
 | Где | Что сделать |
 |---|---|
-| Codex, opencode и агенты с `AGENTS.md` | Скопировать `portable/SYSTEM_PROMPT.md` в `AGENTS.md` проекта или в `~/.codex/AGENTS.md` |
+| opencode и агенты с `AGENTS.md` | Скопировать `portable/SYSTEM_PROMPT.md` в `AGENTS.md` проекта |
 | Cursor | Создать `.cursor/rules/infostyle.mdc` с текстом `portable/SYSTEM_PROMPT.md` |
-| GitHub Copilot | Скопировать в `.github/copilot-instructions.md` |
+| GitHub Copilot в редакторе | Скопировать `portable/SYSTEM_PROMPT.md` в `.github/copilot-instructions.md` |
 | ChatGPT | «Настройки → Персонализация → Пользовательские инструкции»: вставить `portable/SHORT_PROMPT.md`. В GPTs и Projects — `portable/SYSTEM_PROMPT.md` |
 | Claude.ai Projects | Вставить `portable/SYSTEM_PROMPT.md` в инструкции проекта |
 | API любой модели | Передать `portable/SYSTEM_PROMPT.md` как системный промпт |
